@@ -45,5 +45,6 @@ The backend is a Node.js application built with Fastify and TypeScript, followin
 *   **Asynchronous Operations**: Use `async/await` for all asynchronous code.
 *   **Error Handling**: Implement a centralized error handling mechanism.
 *   **Modules**: Use ES Modules over commonJS.
+*   **Imports**: Use destructured imports (e.g., `import { someFunction } from './some-module';`).
 *   **Linting**: ESLint
 *   **Formatting**: Prettier
