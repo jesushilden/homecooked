@@ -42,6 +42,7 @@ The backend is a Node.js application built with Fastify and TypeScript, followin
 ### Backend
 
 *   **File Naming**: Use `kebab-case.ts` for all files (e.g., `user-controller.ts`).
+*   **Functions**: Use arrow functions over traditional functions.
 *   **Asynchronous Operations**: Use `async/await` for all asynchronous code.
 *   **Error Handling**: Implement a centralized error handling mechanism.
 *   **Modules**: Use ES Modules over commonJS.
