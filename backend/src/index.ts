@@ -11,6 +11,7 @@ server.setErrorHandler(errorHandler);
 server.register(pg, {
   connectionString: process.env.DATABASE_URL || 'postgres://user:password@localhost:5432/database',
 });
+
 server.register(routes);
 
 const start = async () => {

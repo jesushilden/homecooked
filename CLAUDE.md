@@ -1,0 +1,1 @@
+This project is guided by the instructions in `README.md`. All conventions and instructions are documented there.
