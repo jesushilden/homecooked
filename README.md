@@ -23,6 +23,8 @@ The project is organized into two main directories:
 
 The backend is a Node.js application built with Fastify and TypeScript, following a layered architecture.
 
+routes -> controllers -> services -> repositories -> database
+
 - **`src/`**: Contains the main source code.
   - **`routes/`**: Defines the API routes and maps them to controllers.
   - **`controllers/`**: Handles incoming requests, validates input, and calls the appropriate services.

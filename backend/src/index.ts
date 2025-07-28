@@ -9,7 +9,7 @@ const server = Fastify({
 
 server.setErrorHandler(errorHandler);
 server.register(pg, {
-  connectionString: process.env.DATABASE_URL || 'postgres://user:password@localhost:5432/database',
+  connectionString: process.env.DATABASE_URL || 'postgres://homecooked_user:homecooked_password@localhost:5432/homecooked',
 });
 
 server.register(routes);
