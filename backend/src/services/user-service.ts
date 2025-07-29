@@ -1,30 +1,7 @@
-import { createHash } from 'crypto';
-import {
-  createUser,
-  getUserByEmail,
-  getUserById,
-  User,
-  CreateUserData,
-  toUser,
-} from '../repositories/user-repository.js';
+import { createUser, getUserByEmail, getUserById } from '../repositories/user-repository.js';
+import { User, RegisterData, LoginData } from '../models/user.js';
+import { hashPassword, toUser, toCreateUserData } from '../utils/user.js';
 import { FastifyInstance } from 'fastify';
-
-export interface RegisterData {
-  email: string;
-  password: string;
-  name: string;
-  phone?: string;
-  address?: string;
-}
-
-export interface LoginData {
-  email: string;
-  password: string;
-}
-
-const hashPassword = (password: string): string => {
-  return createHash('sha256').update(password).digest('hex');
-};
 
 export const register = async (
   pg: FastifyInstance['pg'],
@@ -35,14 +12,7 @@ export const register = async (
     throw new Error('User already exists with this email');
   }
 
-  const createData: CreateUserData = {
-    email: userData.email,
-    name: userData.name,
-    phone: userData.phone,
-    address: userData.address,
-    password_hash: hashPassword(userData.password),
-  };
-
+  const createData = toCreateUserData(userData);
   return await createUser(pg, createData);
 };
 

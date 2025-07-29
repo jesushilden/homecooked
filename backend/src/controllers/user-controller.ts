@@ -4,7 +4,7 @@ import { register, login, getProfile, RegisterData, LoginData } from '../service
 export const registerHandler = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
     const userData = request.body as RegisterData;
-    
+
     if (!userData.email || !userData.password || !userData.name) {
       return reply.status(400).send({ error: 'Email, password, and name are required' });
     }
@@ -22,7 +22,7 @@ export const registerHandler = async (request: FastifyRequest, reply: FastifyRep
 export const loginHandler = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
     const loginData = request.body as LoginData;
-    
+
     if (!loginData.email || !loginData.password) {
       return reply.status(400).send({ error: 'Email and password are required' });
     }
@@ -41,7 +41,7 @@ export const getProfileHandler = async (request: FastifyRequest, reply: FastifyR
   try {
     const { userId } = request.params as { userId: string };
     const user = await getProfile(request.server.pg, parseInt(userId));
-    
+
     if (!user) {
       return reply.status(404).send({ error: 'User not found' });
     }

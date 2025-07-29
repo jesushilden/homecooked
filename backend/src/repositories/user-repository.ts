@@ -1,38 +1,5 @@
 import { FastifyInstance } from 'fastify';
-
-export interface User {
-  id: number;
-  email: string;
-  name: string;
-  phone?: string;
-  address?: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface UserWithPasswordHash extends User {
-  password_hash: string;
-}
-
-export const toUser = (userWithPassword: UserWithPasswordHash): User => {
-  return {
-    id: userWithPassword.id,
-    email: userWithPassword.email,
-    name: userWithPassword.name,
-    phone: userWithPassword.phone,
-    address: userWithPassword.address,
-    created_at: userWithPassword.created_at,
-    updated_at: userWithPassword.updated_at,
-  };
-};
-
-export interface CreateUserData {
-  email: string;
-  password_hash: string;
-  name: string;
-  phone?: string;
-  address?: string;
-}
+import { User, UserWithPasswordHash, CreateUserData } from '../models/user.js';
 
 export const createUser = async (
   pg: FastifyInstance['pg'],
