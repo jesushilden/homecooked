@@ -30,6 +30,10 @@ routes -> controllers -> services -> repositories -> database
   - **`controllers/`**: Handles incoming requests, validates input, and calls the appropriate services.
   - **`services/`**: Contains the core business logic of the application.
   - **`repositories/`**: Manages data access and interaction with the database.
+  - **`models/`**: TypeScript interfaces and types for data models.
+  - **`utils/`**: Utility functions and helper methods.
+  - **`errors/`**: Centralized error handling and custom error classes.
+  - **`database/`**: Database schemas, migrations, and connection configuration.
   - **`index.ts`**: The entry point of the application, responsible for starting the server.
 
 ### Frontend Architecture
