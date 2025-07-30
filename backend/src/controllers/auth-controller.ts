@@ -11,7 +11,7 @@ export const registerHandler = async (request: FastifyRequest, reply: FastifyRep
     throw new AppError('Email, password, and name are required', 400);
   }
 
-  const user = await register(request.server.pg, userData);
+  const user = await register(userData);
   
   setAuthCookies(reply, user);
   
@@ -25,7 +25,7 @@ export const loginHandler = async (request: FastifyRequest, reply: FastifyReply)
     throw new AppError('Email and password are required', 400);
   }
 
-  const user = await login(request.server.pg, loginData);
+  const user = await login(loginData);
   
   setAuthCookies(reply, user);
   
@@ -37,7 +37,7 @@ export const getMeHandler = async (request: FastifyRequest, reply: FastifyReply)
     throw new AppError('Unauthorized', 401);
   }
 
-  const user = await getProfile(request.server.pg, request.user.userId);
+  const user = await getProfile(request.user.userId);
   
   if (!user) {
     throw new AppError('User not found', 404);
@@ -61,7 +61,7 @@ export const refreshHandler = async (request: FastifyRequest, reply: FastifyRepl
   try {
     const payload = verifyRefreshToken(refreshToken);
     
-    const user = await getProfile(request.server.pg, payload.userId);
+    const user = await getProfile(payload.userId);
     if (!user) {
       throw new AppError('User not found', 401);
     }

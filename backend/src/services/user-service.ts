@@ -2,13 +2,9 @@ import { createUser, getUserByEmail, getUserById } from '../repositories/user-re
 import { User, RegisterData, LoginData, CreateUserData } from '../models/user.js';
 import { comparePassword, hashPassword } from '../utils/auth.js';
 import { AppError } from '../errors/app-error.js';
-import { FastifyInstance } from 'fastify';
 
-export const register = async (
-  pg: FastifyInstance['pg'],
-  userData: RegisterData,
-): Promise<User> => {
-  const existingUser = await getUserByEmail(pg, userData.email);
+export const register = async (userData: RegisterData): Promise<User> => {
+  const existingUser = await getUserByEmail(userData.email);
   if (existingUser) {
     throw new AppError('User already exists with this email', 409);
   }
@@ -21,11 +17,11 @@ export const register = async (
     address: userData.address,
     password_hash: hashedPassword,
   };
-  return await createUser(pg, createData);
+  return await createUser(createData);
 };
 
-export const login = async (pg: FastifyInstance['pg'], loginData: LoginData): Promise<User> => {
-  const userWithPasswordHash = await getUserByEmail(pg, loginData.email);
+export const login = async (loginData: LoginData): Promise<User> => {
+  const userWithPasswordHash = await getUserByEmail(loginData.email);
   if (!userWithPasswordHash) {
     throw new AppError('Invalid email or password', 401);
   }
@@ -51,6 +47,6 @@ export const login = async (pg: FastifyInstance['pg'], loginData: LoginData): Pr
   return user;
 };
 
-export const getProfile = async (pg: FastifyInstance['pg'], id: number): Promise<User | null> => {
-  return await getUserById(pg, id);
+export const getProfile = async (id: number): Promise<User | null> => {
+  return await getUserById(id);
 };
