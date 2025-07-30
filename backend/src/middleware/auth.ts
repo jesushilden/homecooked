@@ -1,11 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { verifyAccessToken, JWTPayload } from '../utils/auth.js';
-
-declare module 'fastify' {
-  interface FastifyRequest {
-    user?: JWTPayload;
-  }
-}
+import { verifyAccessToken } from '../utils/auth.js';
 
 export const authMiddleware = async (request: FastifyRequest, reply: FastifyReply) => {
   try {

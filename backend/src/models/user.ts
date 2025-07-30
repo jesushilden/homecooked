@@ -32,3 +32,8 @@ export interface LoginData {
   email: string;
   password: string;
 }
+
+export interface JWTPayload {
+  userId: number;
+  email: string;
+}

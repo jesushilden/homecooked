@@ -1,15 +1,10 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { FastifyReply } from 'fastify';
-import { User } from '../models/user.js';
+import { User, JWTPayload } from '../models/user.js';
 
 const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET || 'your-access-secret-key';
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'your-refresh-secret-key';
-
-export interface JWTPayload {
-  userId: number;
-  email: string;
-}
 
 export const hashPassword = async (password: string): Promise<string> => {
   return await bcrypt.hash(password, 10);
