@@ -1,6 +1,7 @@
 import { createUser, getUserByEmail, getUserById } from '../repositories/user-repository.js';
 import { User, RegisterData, LoginData, CreateUserData } from '../models/user.js';
 import { comparePassword, hashPassword } from '../utils/auth.js';
+import { AppError } from '../errors/app-error.js';
 import { FastifyInstance } from 'fastify';
 
 export const register = async (
@@ -9,7 +10,7 @@ export const register = async (
 ): Promise<User> => {
   const existingUser = await getUserByEmail(pg, userData.email);
   if (existingUser) {
-    throw new Error('User already exists with this email');
+    throw new AppError('User already exists with this email', 409);
   }
 
   const hashedPassword = await hashPassword(userData.password);
@@ -26,7 +27,7 @@ export const register = async (
 export const login = async (pg: FastifyInstance['pg'], loginData: LoginData): Promise<User> => {
   const userWithPasswordHash = await getUserByEmail(pg, loginData.email);
   if (!userWithPasswordHash) {
-    throw new Error('Invalid email or password');
+    throw new AppError('Invalid email or password', 401);
   }
 
   const isValidPassword = await comparePassword(
@@ -34,7 +35,7 @@ export const login = async (pg: FastifyInstance['pg'], loginData: LoginData): Pr
     userWithPasswordHash.password_hash,
   );
   if (!isValidPassword) {
-    throw new Error('Invalid email or password');
+    throw new AppError('Invalid email or password', 401);
   }
 
   const user: User = {

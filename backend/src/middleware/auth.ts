@@ -1,20 +1,21 @@
-import { FastifyRequest, FastifyReply } from 'fastify';
+import { FastifyRequest } from 'fastify';
 import { verifyAccessToken } from '../utils/auth.js';
+import { AppError } from '../errors/app-error.js';
 
-export const authMiddleware = async (request: FastifyRequest, reply: FastifyReply) => {
+export const authMiddleware = async (request: FastifyRequest) => {
+  const accessToken = request.cookies.accessToken;
+
+  if (!accessToken) {
+    throw new AppError('Access token required', 401);
+  }
+
   try {
-    const accessToken = request.cookies.accessToken;
-
-    if (!accessToken) {
-      return reply.status(401).send({ error: 'Access token required' });
-    }
-
     const payload = verifyAccessToken(accessToken);
     request.user = payload;
   } catch (error) {
     if (error instanceof Error && error.name === 'TokenExpiredError') {
-      return reply.status(401).send({ error: 'Access token expired' });
+      throw new AppError('Access token expired', 401);
     }
-    return reply.status(401).send({ error: 'Invalid access token' });
+    throw new AppError('Invalid access token', 401);
   }
 };
