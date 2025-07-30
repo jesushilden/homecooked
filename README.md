@@ -14,10 +14,11 @@ To build trust in the community, both chefs and customers can leave reviews afte
 
 ## Architecture
 
-The project is organized into two main directories:
+The project is organized into three main directories:
 
 - **`backend/`**: Contains the backend service.
 - **`frontend/`**: Contains the frontend application.
+- **`database/`**: Contains database schemas, migrations, and connection configuration.
 
 ### Backend Architecture
 
@@ -33,7 +34,6 @@ routes -> controllers -> services -> repositories -> database
   - **`models/`**: TypeScript interfaces and types for data models.
   - **`utils/`**: Utility functions and helper methods.
   - **`errors/`**: Centralized error handling and custom error classes.
-  - **`database/`**: Database schemas, migrations, and connection configuration.
   - **`index.ts`**: The entry point of the application, responsible for starting the server.
 
 ### Frontend Architecture
@@ -75,3 +75,8 @@ routes -> controllers -> services -> repositories -> database
 - `npm run format`: Format the codebase.
 - `npm run format:check`: Check the format of the codebase.
 - `npm test`: Run tests.
+
+### Database
+
+- `docker compose up -d`: Start PostgreSQL service.
+- `docker compose down`: Stop PostgreSQL service.

@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import pg from '@fastify/postgres';
+import cookie from '@fastify/cookie';
 import { routes } from './routes/index.js';
 import { errorHandler } from './errors/error-handler.js';
 
@@ -8,6 +9,7 @@ const server = Fastify({
 });
 
 server.setErrorHandler(errorHandler);
+server.register(cookie);
 server.register(pg, {
   connectionString:
     process.env.DATABASE_URL ||
