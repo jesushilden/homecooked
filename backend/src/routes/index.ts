@@ -6,6 +6,14 @@ import {
   logoutHandler,
   refreshHandler,
 } from '../controllers/auth-controller.js';
+import {
+  createMealHandler,
+  getMealHandler,
+  getMyMealsHandler,
+  getMealsHandler,
+  updateMealHandler,
+  deleteMealHandler,
+} from '../controllers/meal-controller.js';
 import { authMiddleware } from '../middleware/auth.js';
 
 export const routes = async (fastify: FastifyInstance) => {
@@ -15,4 +23,12 @@ export const routes = async (fastify: FastifyInstance) => {
   fastify.get('/api/auth/me', { preHandler: authMiddleware }, getMeHandler);
   fastify.post('/api/auth/logout', logoutHandler);
   fastify.post('/api/auth/refresh', refreshHandler);
+
+  // Meal routes
+  fastify.post('/api/meals', { preHandler: authMiddleware }, createMealHandler);
+  fastify.get('/api/meals', getMealsHandler);
+  fastify.get('/api/meals/my', { preHandler: authMiddleware }, getMyMealsHandler);
+  fastify.get('/api/meals/:id', getMealHandler);
+  fastify.put('/api/meals/:id', { preHandler: authMiddleware }, updateMealHandler);
+  fastify.delete('/api/meals/:id', { preHandler: authMiddleware }, deleteMealHandler);
 };
