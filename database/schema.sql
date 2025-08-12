@@ -23,9 +23,10 @@ CREATE TABLE meals (
     image_url VARCHAR(500), -- Optional meal image
     price_per_portion DECIMAL(10,2) NOT NULL,
     total_portions INTEGER NOT NULL,
-    pickup_date DATE NOT NULL,
-    pickup_time_start TIME NOT NULL,
-    pickup_time_end TIME NOT NULL,
+    pickup_time_start TIMESTAMP NOT NULL,
+    pickup_time_end TIMESTAMP NOT NULL,
+    order_time_start TIMESTAMP,
+    order_time_end TIMESTAMP,
     pickup_location TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -57,7 +58,7 @@ CREATE TABLE reviews (
 
 -- Create indexes for better performance
 CREATE INDEX idx_meals_chef_id ON meals(chef_id);
-CREATE INDEX idx_meals_pickup_date ON meals(pickup_date);
+CREATE INDEX idx_meals_pickup_time_start ON meals(pickup_time_start);
 CREATE INDEX idx_reservations_meal_id ON reservations(meal_id);
 CREATE INDEX idx_reservations_customer_id ON reservations(customer_id);
 CREATE INDEX idx_reservations_status ON reservations(status);
