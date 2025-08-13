@@ -1,3 +1,5 @@
+import { Static, Type } from '@sinclair/typebox';
+
 export interface User {
   id: number;
   email: string;
@@ -20,13 +22,15 @@ export interface CreateUserData {
   address?: string;
 }
 
-export interface RegisterData {
-  email: string;
-  password: string;
-  name: string;
-  phone?: string;
-  address?: string;
-}
+export const RegisterDataSchema = Type.Object({
+  email: Type.String({ format: 'email' }),
+  password: Type.String({ minLength: 8 }),
+  name: Type.String({ minLength: 1 }),
+  phone: Type.Optional(Type.String()),
+  address: Type.Optional(Type.String()),
+});
+
+export type RegisterData = Static<typeof RegisterDataSchema>;
 
 export interface LoginData {
   email: string;

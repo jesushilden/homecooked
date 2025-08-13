@@ -22,6 +22,7 @@ const start = async () => {
     await server.listen({ port: 3000 });
   } catch (err) {
     server.log.error('Failed to start server', err);
+    console.error(err);
     process.exit(1);
   }
 };

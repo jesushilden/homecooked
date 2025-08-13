@@ -12,9 +12,9 @@ export const registerHandler = async (request: FastifyRequest, reply: FastifyRep
   }
 
   const user = await register(userData);
-  
+
   setAuthCookies(reply, user);
-  
+
   reply.status(201).send({ user });
 };
 
@@ -26,9 +26,9 @@ export const loginHandler = async (request: FastifyRequest, reply: FastifyReply)
   }
 
   const user = await login(loginData);
-  
+
   setAuthCookies(reply, user);
-  
+
   reply.send({ user });
 };
 
@@ -38,7 +38,7 @@ export const getMeHandler = async (request: FastifyRequest, reply: FastifyReply)
   }
 
   const user = await getProfile(request.user.userId);
-  
+
   if (!user) {
     throw new AppError('User not found', 404);
   }
@@ -60,17 +60,20 @@ export const refreshHandler = async (request: FastifyRequest, reply: FastifyRepl
 
   try {
     const payload = verifyRefreshToken(refreshToken);
-    
+
     const user = await getProfile(payload.userId);
     if (!user) {
       throw new AppError('User not found', 401);
     }
 
     setAuthCookies(reply, user);
-    
+
     reply.send({ message: 'Tokens refreshed successfully' });
   } catch (err) {
-    if (err instanceof Error && (err.name === 'TokenExpiredError' || err.name === 'JsonWebTokenError')) {
+    if (
+      err instanceof Error &&
+      (err.name === 'TokenExpiredError' || err.name === 'JsonWebTokenError')
+    ) {
       clearAuthCookies(reply);
       throw new AppError('Invalid or expired refresh token', 401);
     }

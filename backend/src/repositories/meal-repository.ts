@@ -19,7 +19,7 @@ export const createMeal = async (mealData: CreateMealData): Promise<Meal> => {
       mealData.order_time_start,
       mealData.order_time_end,
       mealData.pickup_location,
-    ]
+    ],
   );
   return result.rows[0];
 };
@@ -30,7 +30,10 @@ export const getMealById = async (id: number): Promise<Meal | null> => {
 };
 
 export const getMealsByChefId = async (chefId: number): Promise<Meal[]> => {
-  const result = await pool.query<Meal>('SELECT * FROM meals WHERE chef_id = $1 ORDER BY pickup_time_start DESC', [chefId]);
+  const result = await pool.query<Meal>(
+    'SELECT * FROM meals WHERE chef_id = $1 ORDER BY pickup_time_start DESC',
+    [chefId],
+  );
   return result.rows;
 };
 
@@ -41,7 +44,7 @@ export const getAllMeals = async (): Promise<Meal[]> => {
 
 export const updateMeal = async (id: number, mealData: UpdateMealData): Promise<Meal | null> => {
   const fields: string[] = [];
-  const values: any[] = [];
+  const values: unknown[] = [];
   let paramCount = 1;
 
   Object.entries(mealData).forEach(([key, value]) => {
@@ -59,7 +62,7 @@ export const updateMeal = async (id: number, mealData: UpdateMealData): Promise<
 
   values.push(id);
   const query = `UPDATE meals SET ${fields.join(', ')} WHERE id = $${paramCount} RETURNING *`;
-  
+
   const result = await pool.query<Meal>(query, values);
   return result.rows[0] || null;
 };

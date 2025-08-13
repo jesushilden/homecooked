@@ -15,10 +15,19 @@ import {
   deleteMealHandler,
 } from '../controllers/meal-controller.js';
 import { authMiddleware } from '../middleware/auth.js';
+import { RegisterDataSchema } from '../models/user.js';
 
 export const routes = async (fastify: FastifyInstance) => {
   // User authentication routes
-  fastify.post('/api/auth/register', registerHandler);
+  fastify.post(
+    '/api/auth/register',
+    {
+      schema: {
+        body: RegisterDataSchema,
+      },
+    },
+    registerHandler,
+  );
   fastify.post('/api/auth/login', loginHandler);
   fastify.get('/api/auth/me', { preHandler: authMiddleware }, getMeHandler);
   fastify.post('/api/auth/logout', logoutHandler);
