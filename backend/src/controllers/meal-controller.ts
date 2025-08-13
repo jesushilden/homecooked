@@ -7,7 +7,13 @@ import {
   updateMealListing,
   deleteMealListing,
 } from '../services/meal-service.js';
-import { CreateMealData, UpdateMealData } from '../models/meal.js';
+import {
+  CreateMealData,
+  UpdateMealData,
+  CreateMealDataInput,
+  UpdateMealDataInput,
+  MealIdParams,
+} from '../models/meal.js';
 import { AppError } from '../errors/app-error.js';
 
 export const createMealHandler = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -15,21 +21,7 @@ export const createMealHandler = async (request: FastifyRequest, reply: FastifyR
     throw new AppError('Unauthorized', 401);
   }
 
-  const mealData = request.body as Omit<CreateMealData, 'chef_id'>;
-
-  if (
-    !mealData.title ||
-    !mealData.price_per_portion ||
-    !mealData.total_portions ||
-    !mealData.pickup_time_start ||
-    !mealData.pickup_time_end ||
-    !mealData.pickup_location
-  ) {
-    throw new AppError(
-      'Title, price per portion, total portions, pickup times, and pickup location are required',
-      400,
-    );
-  }
+  const mealData = request.body as CreateMealDataInput;
 
   const createData: CreateMealData = {
     ...mealData,
@@ -46,11 +38,7 @@ export const createMealHandler = async (request: FastifyRequest, reply: FastifyR
 };
 
 export const getMealHandler = async (request: FastifyRequest, reply: FastifyReply) => {
-  const { id } = request.params as { id: string };
-
-  if (!id || isNaN(Number(id))) {
-    throw new AppError('Invalid meal ID', 400);
-  }
+  const { id } = request.params as MealIdParams;
 
   const meal = await getMeal(Number(id));
 
@@ -82,26 +70,24 @@ export const updateMealHandler = async (request: FastifyRequest, reply: FastifyR
     throw new AppError('Unauthorized', 401);
   }
 
-  const { id } = request.params as { id: string };
+  const { id } = request.params as MealIdParams;
+  const updateDataInput = request.body as UpdateMealDataInput;
 
-  if (!id || isNaN(Number(id))) {
-    throw new AppError('Invalid meal ID', 400);
-  }
-
-  const updateData = request.body as UpdateMealData;
-
-  if (updateData.pickup_time_start) {
-    updateData.pickup_time_start = new Date(updateData.pickup_time_start);
-  }
-  if (updateData.pickup_time_end) {
-    updateData.pickup_time_end = new Date(updateData.pickup_time_end);
-  }
-  if (updateData.order_time_start) {
-    updateData.order_time_start = new Date(updateData.order_time_start);
-  }
-  if (updateData.order_time_end) {
-    updateData.order_time_end = new Date(updateData.order_time_end);
-  }
+  const updateData: UpdateMealData = {
+    ...updateDataInput,
+    pickup_time_start: updateDataInput.pickup_time_start
+      ? new Date(updateDataInput.pickup_time_start)
+      : undefined,
+    pickup_time_end: updateDataInput.pickup_time_end
+      ? new Date(updateDataInput.pickup_time_end)
+      : undefined,
+    order_time_start: updateDataInput.order_time_start
+      ? new Date(updateDataInput.order_time_start)
+      : undefined,
+    order_time_end: updateDataInput.order_time_end
+      ? new Date(updateDataInput.order_time_end)
+      : undefined,
+  };
 
   const meal = await updateMealListing(Number(id), request.user.userId, updateData);
 
@@ -113,11 +99,7 @@ export const deleteMealHandler = async (request: FastifyRequest, reply: FastifyR
     throw new AppError('Unauthorized', 401);
   }
 
-  const { id } = request.params as { id: string };
-
-  if (!id || isNaN(Number(id))) {
-    throw new AppError('Invalid meal ID', 400);
-  }
+  const { id } = request.params as MealIdParams;
 
   await deleteMealListing(Number(id), request.user.userId);
 

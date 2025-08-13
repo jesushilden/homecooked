@@ -7,10 +7,6 @@ import { AppError } from '../errors/app-error.js';
 export const registerHandler = async (request: FastifyRequest, reply: FastifyReply) => {
   const userData = request.body as RegisterData;
 
-  if (!userData.email || !userData.password || !userData.name) {
-    throw new AppError('Email, password, and name are required', 400);
-  }
-
   const user = await register(userData);
 
   setAuthCookies(reply, user);
@@ -20,10 +16,6 @@ export const registerHandler = async (request: FastifyRequest, reply: FastifyRep
 
 export const loginHandler = async (request: FastifyRequest, reply: FastifyReply) => {
   const loginData = request.body as LoginData;
-
-  if (!loginData.email || !loginData.password) {
-    throw new AppError('Email and password are required', 400);
-  }
 
   const user = await login(loginData);
 

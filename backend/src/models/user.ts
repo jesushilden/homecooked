@@ -32,10 +32,12 @@ export const RegisterDataSchema = Type.Object({
 
 export type RegisterData = Static<typeof RegisterDataSchema>;
 
-export interface LoginData {
-  email: string;
-  password: string;
-}
+export const LoginDataSchema = Type.Object({
+  email: Type.String({ format: 'email' }),
+  password: Type.String({ minLength: 1 }),
+});
+
+export type LoginData = Static<typeof LoginDataSchema>;
 
 export interface JWTPayload {
   userId: number;
